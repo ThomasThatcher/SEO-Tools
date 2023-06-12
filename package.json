@@ -1,0 +1,21 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@huggingface/hub": "^0.8.3",
+    "@huggingface/inference": "^2.5.1",
+    "@nuxt/devtools": "latest",
+    "@nuxtjs/axios": "^5.13.6",
+    "@nuxtjs/tailwindcss": "^6.7.0",
+    "@types/node": "^18",
+    "@xenova/transformers": "^2.2.0",
+    "nuxt": "^3.5.2"
+  }
+}
