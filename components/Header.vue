@@ -20,27 +20,7 @@
 </template>
 
 <script lang="ts">
-
-    //const route = useRoute()
-    //console.log(route.path)
-    /*
     export default{
-        data() {
-            return {
-                text_clas: false,
-                alt_text_gen: false
-            }
-        },
-        mounted(){
-            if(route.path == '/alt-text-gen'){
-                this.alt_text_gen = true
-                this.text_clas = false
-            }
-            if(route.path == '/text-classifer'){
-                this.text_clas = true
-                this.alt_text_gen = false
-            }
-        }
+        
     }
-    */
 </script>
