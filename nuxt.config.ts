@@ -5,4 +5,16 @@ export default defineNuxtConfig({
     //'@nuxtjs/axios',
     '@nuxtjs/tailwindcss'
   ],
+  vite: {
+    build: {
+      target: 'esnext',
+    },
+  },
+  nitro: {
+    esbuild: {
+      options: {
+        target: 'esnext'
+      }
+    }
+  }
 })
