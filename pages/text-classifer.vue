@@ -15,6 +15,7 @@
             </form>
         </div>
         <div class="basis-1/2 overflow-scroll h-screen mt-10">
+            <p v-if="complete"></p>
             <div v-for="keywords, category in output">
                 <div class="relative overflow-x-auto">
                     <table class="w-10/12 text-sm text-left text-gray-500 dark:text-gray-400 mt-6">
@@ -50,9 +51,37 @@ export default {
             output: {},
             data: [],
             form_error: false,
+            complete: false,
         }
     },
     methods: {
+        async classify_text(){
+            this.complete = false
+            var forms_not_filled_out = (this.categories == null || this.categories == false) || (this.keywords == null || this.keywords == false)
+            if(forms_not_filled_out) {
+                this.form_error = true; 
+                return;
+            }else{
+                var categories = this.get_categories()
+                var keywords = this.get_keywords()
+                var keyword_chunks = this.create_keyword_chunks(keywords, 25)
+                for(const category of categories) this.output[category] = []
+
+                for(const c of keyword_chunks){
+                    var args = { model: 'facebook/bart-large-mnli', inputs: c, parameters: { candidate_labels: categories } }
+                    for(const result of await inference.zeroShotClassification(args)){
+                        var keyword = result.sequence
+                        var labels = result.labels
+                        var scores = result.scores
+                        var category_index = this.largest_number_index(scores)
+                        var category = labels[category_index]
+                        this.output[category].push(keyword) // Add keyword to appropriate category
+                    }
+                }
+
+                this.complete = true
+            }
+        },
         get_keywords(){
             if(this.keywords == null) {
                 return false
@@ -64,32 +93,6 @@ export default {
                 return false
             }
             return this.categories.split(',');
-        },
-        async classify_text(){
-            this.form_error = false
-            var forms_not_filled_out = (this.categories == null || this.categories == false) || (this.keywords == null || this.keywords == false)
-            if(forms_not_filled_out) {
-                this.form_error = true; 
-                return;
-            }else{
-
-                var c = this.get_categories()
-                var k = this.get_keywords()
-                //console.log(this.keywords)
-
-                var classification_params = { model: 'facebook/bart-large-mnli', inputs: k, parameters: { candidate_labels: c } }
-
-                for(category of c) this.output[category] = []
-
-                for(const result of await inference.zeroShotClassification(classification_params)){
-                    var scores = result.scores
-                    var labels = result.labels
-                    var keyword = result.sequence
-                    var category_index = this.largest_number_index(scores)
-                    var category = labels[category_index]
-                    this.output[category].push(keyword) // Add keyword to appropriate category
-                }
-            }
         },
         set_new_data(d){
             this.data = d
@@ -104,6 +107,22 @@ export default {
             }
             return largest_number_index
         },
+        create_keyword_chunks(keywords, chunk_size){
+            //const chunkSize = 25;
+            var chunks = []
+            for (let c = 0; c < keywords.length; c += chunk_size) {
+                const chunk = keywords.slice(c, c + chunk_size);
+                chunks.push(chunk)
+            }
+            return chunks
+        },
+        create_keyword_categories(categories){
+            var c = []
+            for(const category of categories) {
+                c[category] = []
+            }
+            return c
+        }
     }
 }
 </script>
