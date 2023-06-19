@@ -10,6 +10,7 @@
                         <div class="flex space-x-4">
                             <NuxtLink id="alt-text-gen" exact-active-class="active" class="inactive" to="/alt-text-gen">Alt Text Generator</NuxtLink>
                             <NuxtLink id="text-class" exact-active-class="active" class="inactive" to="/text-classifer">Text Classifier</NuxtLink>
+                            <NuxtLink id="keyword-gen-class" exact-active-class="active" class="inactive" to="/keyword-generator">Keyword Generator</NuxtLink>
                         </div>
                     </div>
                 </div>
