@@ -42,7 +42,7 @@
 //import { pipeline } from '@xenova/transformers';
 import { HfInference } from "@huggingface/inference";
 
-const HF_ACCESS_TOKEN = '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';
+const HF_ACCESS_TOKEN = '';
 const inference = new HfInference(HF_ACCESS_TOKEN);
 
 export default {
